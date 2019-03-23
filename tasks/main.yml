@@ -86,8 +86,6 @@
     name: postgresql
     state: started
     enabled: true
-    arguments: "{{ pg_version }}"
-    pattern: "/usr/lib/postgresql/{{ pg_version | float }}/bin/postgres -D /var/lib/postgresql/{{ pg_version }}/{{ pg_cluster }}"
   become: true
   tags: postgres_start
 
@@ -102,7 +100,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.permissions }}"
-    encrypted: "{{ item.password_encrypted|default(no) }}"
+    encrypted: "{{ item.password_encrypted | default('no') }}"
   with_items: "{{ pg_users }}"
 
 - name: create replication user
@@ -112,7 +110,7 @@
     name: "{{ pg_replica_user }}"
     password: "{{ pg_replica_password }}"
     role_attr_flags: "LOGIN,REPLICATION"
-    encrypted: "{{ pg_replica_password_encrypted|default(no) }}"
+    encrypted: "{{ pg_replica_password_encrypted | default('no') }}"
   when: pg_has_replica
 
 - name: create databases
