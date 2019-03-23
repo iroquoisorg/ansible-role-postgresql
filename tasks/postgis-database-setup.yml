@@ -26,5 +26,5 @@
   shell: >
     psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries
     --command='create extension IF NOT EXISTS \"postgis\";' \"{{ item.item.name }}\"
-  when: not item.stdout
+  when: item.stdout | length > 0
   with_items: "{{ postgis_in_databases.results }}"
