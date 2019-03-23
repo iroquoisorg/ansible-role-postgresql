@@ -2,7 +2,7 @@
 - name: Install development headers
   apt: pkg="libpq-dev"
   become: true
-  when: pg_dev_headers == True
+  when: pg_dev_headers
   tags:
     - postgresql
 

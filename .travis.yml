@@ -20,6 +20,7 @@ install:
 
 script:
   - molecule test
+  - molecule test --scenario-name=v11
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
