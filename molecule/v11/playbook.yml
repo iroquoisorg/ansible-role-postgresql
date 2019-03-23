@@ -1,8 +1,0 @@
----
-- name: Converge
-  hosts: all
-  become: true
-  vars:
-    pg_version: 11
-  roles:
-    - role: ansible-role-postgresql
