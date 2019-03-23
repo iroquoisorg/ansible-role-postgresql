@@ -9,7 +9,11 @@
 - name: revoke create table permissions from public
   become: true
   become_user: postgres
-  shell: "psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries --command='REVOKE ALL ON SCHEMA public FROM public; GRANT USAGE ON SCHEMA public TO public; GRANT ALL ON SCHEMA public TO \"{{ access.rw_user }}\";' \"{{ access.database }}\""
+  shell: >
+    psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries
+    --command='REVOKE ALL ON SCHEMA public FROM public;
+    GRANT USAGE ON SCHEMA public TO public; GRANT ALL ON SCHEMA public TO \"{{ access.rw_user }}\";'
+    \"{{ access.database }}\"
 
 - name: prepare SQL
   template:
@@ -20,7 +24,9 @@
     mode: 0600
 
 - name: execute SQL
-  shell: "psql -U \"{{ access.rw_user }}\" --no-psqlrc --no-align --tuples-only --quiet --echo-queries --file=\"/tmp/create-ro-user.sql\" \"{{ access.database }}\""
+  command: >
+    psql -U \"{{ access.rw_user }}\" --no-psqlrc --no-align --tuples-only --quiet --echo-queries
+    --file=\"/tmp/create-ro-user.sql\" \"{{ access.database }}\"
   environment:
     PGPASSWORD: "{{ access.rw_password }}"
 

@@ -102,6 +102,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.permissions }}"
+    encrypted: "{{ item.password_encrypted|default(no) }}"
   with_items: "{{ pg_users }}"
 
 - name: create replication user
@@ -111,7 +112,8 @@
     name: "{{ pg_replica_user }}"
     password: "{{ pg_replica_password }}"
     role_attr_flags: "LOGIN,REPLICATION"
-  when: pg_has_replica == true
+    encrypted: "{{ pg_replica_password_encrypted|default(no) }}"
+  when: pg_has_replica
 
 - name: create databases
   become: true
@@ -120,24 +122,24 @@
     name: "{{ item.name }}"
     owner: "{{ item.owner }}"
   with_items: "{{ pg_databases }}"
-  when: pg_replica == false
+  when: not pg_replica
 
 - name: create read-only user
   include: ro-user.yml
-  when: pg_ro_user is defined and pg_replica == false
+  when: pg_ro_user is defined and not pg_replica
 
 - include_tasks: multi-ro-user.yml
   with_items: "{{ pg_read_only_access }}"
   loop_control:
     loop_var: access
-  when: pg_read_only_access is defined and pg_replica == false
+  when: pg_read_only_access is defined and not pg_replica
 
 - include: postgis-database-setup.yml
-  when: pg_postgis and pg_replica == false
+  when: pg_postgis and not pg_replica
   tags: postgres_postgis
 
 - include: uuid-database-setup.yml
-  when: pg_uuid and pg_replica == false
+  when: pg_uuid and not pg_replica
   tags: postgres_uuid
 
 - name: Check if zsonlib is installed
@@ -146,5 +148,5 @@
   register: zson_lib
 
 - include: zson.yml
-  when: pg_zson and zson_lib.stat.exists == false
+  when: pg_zson and not zson_lib.stat.exists
   tags: postgres_zson

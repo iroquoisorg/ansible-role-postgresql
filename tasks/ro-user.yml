@@ -5,11 +5,15 @@
   postgresql_user:
     name: "{{ pg_ro_user }}"
     password: "{{ pg_ro_password }}"
+    encrypted: "{{ pg_ro_password_encrypted|default(no) }}"
 
 - name: revoke create table permissions from public
   become: true
   become_user: postgres
-  command: "psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries --command='REVOKE ALL ON SCHEMA public FROM public; GRANT USAGE ON SCHEMA public TO public; GRANT ALL ON SCHEMA public TO \"{{ pg_users[0].name }}\";' \"{{ pg_ro_database }}\""
+  command: >
+    psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries
+    --command='REVOKE ALL ON SCHEMA public FROM public; GRANT USAGE ON SCHEMA public TO public;
+    GRANT ALL ON SCHEMA public TO \"{{ pg_users[0].name }}\";' \"{{ pg_ro_database }}\"
 
 - name: prepare SQL
   template:
@@ -20,7 +24,9 @@
     mode: 0600
 
 - name: execute SQL
-  command: "psql -U \"{{ pg_users[0].name }}\" --no-psqlrc --no-align --tuples-only --quiet --echo-queries --file=\"/tmp/create-ro-user.sql\" \"{{ pg_ro_database }}\""
+  command: >
+    psql -U \"{{ pg_users[0].name }}\" --no-psqlrc --no-align
+    --tuples-only --quiet --echo-queries --file=\"/tmp/create-ro-user.sql\" \"{{ pg_ro_database }}\"
   environment:
     PGPASSWORD: "{{ pg_users[0].password }}"
 
