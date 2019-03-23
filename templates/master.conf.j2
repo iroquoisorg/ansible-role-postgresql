@@ -572,7 +572,9 @@ default_with_oids = {{ pg_cfg_srv_default_with_oids }}
 escape_string_warning = {{ pg_cfg_srv_escape_string_warning }}
 lo_compat_privileges = {{ pg_cfg_srv_lo_compat_privileges }}
 quote_all_identifiers = {{ pg_cfg_srv_quote_all_identifiers }}
+{% if pg_cfg_srv_sql_inheritance %}
 sql_inheritance = {{ pg_cfg_srv_sql_inheritance }}
+{% endif %}
 standard_conforming_strings = {{ pg_cfg_srv_standard_conforming_strings }}
 synchronize_seqscans = {{ pg_cfg_srv_synchronize_seqscans }}
 

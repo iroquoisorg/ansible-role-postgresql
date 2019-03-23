@@ -102,6 +102,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.permissions }}"
+    encrypted: "{{ item.password_encrypted }}"
   with_items: "{{ pg_users }}"
 
 - name: create replication user
@@ -111,6 +112,7 @@
     name: "{{ pg_replica_user }}"
     password: "{{ pg_replica_password }}"
     role_attr_flags: "LOGIN,REPLICATION"
+    encrypted: "{{ pg_replica_password_encrypted }}"
   when: pg_has_replica == true
 
 - name: create databases

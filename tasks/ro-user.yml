@@ -5,6 +5,7 @@
   postgresql_user:
     name: "{{ pg_ro_user }}"
     password: "{{ pg_ro_password }}"
+    encrypted: "{{ pg_ro_password_encrypted }}"
 
 - name: revoke create table permissions from public
   become: true

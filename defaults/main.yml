@@ -15,7 +15,7 @@ pg_cluster: 'main'
 pg_cluster_recreate: false
 
 # Databases
-pg_users: []  # {name: "username", password: "123456", permissions: "CREATEDB"}
+pg_users: []  # {name: "username", password: "123456", password_encrypted: "no" permissions: "CREATEDB"}
 pg_databases: []  # {name: "dbname", owner: "username"}
 
 # replication
@@ -23,6 +23,7 @@ pg_replica: false
 pg_has_replica: false
 pg_replica_user: replicator
 pg_replica_password: change-me
+pg_replica_password_encrypted: no
 pg_cfg_srv_hot_standby: 'off'
 pg_cfg_srv_max_standby_streaming_delay: '30s'
 
@@ -41,6 +42,7 @@ pg_cfg_srv_max_standby_streaming_delay: '30s'
 # DEPRECATION WARNING: support for variables below will be removed in future releases
 # pg_ro_user: username
 # pg_ro_password: password
+# pg_ro_password_encrypted: yes
 # pg_ro_database: databasename
 
 # Extensions setup
@@ -566,7 +568,7 @@ pg_cfg_srv_default_with_oids: 'off'
 pg_cfg_srv_escape_string_warning: 'on'
 pg_cfg_srv_lo_compat_privileges: 'off'
 pg_cfg_srv_quote_all_identifiers: 'off'
-pg_cfg_srv_sql_inheritance: 'on'
+pg_cfg_srv_sql_inheritance: ~
 pg_cfg_srv_standard_conforming_strings: 'on'
 pg_cfg_srv_synchronize_seqscans: 'on'
 
