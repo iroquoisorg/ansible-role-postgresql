@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    pg_version: 11
+    pg_users:
+      - { name: "testv11", password: "testv11", permissions: "LOGIN", password_encrypted: "yes"}
+    pg_databases:
+      - { name: "testv11", owner: "testv11" }
+  roles:
+    - role: ansible-role-postgresql

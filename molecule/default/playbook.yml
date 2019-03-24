@@ -9,5 +9,9 @@
     pg_cfg_srv_fsync: 'off'
     pg_cfg_srv_shared_buffers: 128MB
     pg_cfg_srv_work_mem: 64MB
+    pg_users:
+      - { name: "testv96", password: "testv96", permissions: "LOGIN" }
+    pg_databases:
+      - { name: "testv96", owner: "testv96" }
   roles:
     - role: ansible-role-postgresql

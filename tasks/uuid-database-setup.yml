@@ -10,7 +10,7 @@
   become: true
   become_user: postgres
   shell: "psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries --command='create extension IF NOT EXISTS \"uuid-ossp\";' \"template1\""
-  when: not uuid_in_template1.stdout
+  when: uuid_in_template1.stdout | length
 
 - name: Check if UUID extension is installed in databases
   become: true
@@ -24,5 +24,5 @@
   become: true
   become_user: postgres
   shell: "psql --no-psqlrc --no-align --tuples-only --quiet --echo-queries --command='create extension IF NOT EXISTS \"uuid-ossp\";' \"{{ item.item.name }}\""
-  when: not item.stdout
+  when: item.stdout | length > 0
   with_items: "{{ uuid_in_databases.results }}"
