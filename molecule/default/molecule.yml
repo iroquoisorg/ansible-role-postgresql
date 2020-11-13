@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
   provider:
-    name: virtualbox
+    name: VBox
 lint:
   name: yamllint
 platforms:
